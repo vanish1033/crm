@@ -8,6 +8,7 @@ import com.bjpowernode.crm.utils.DateTimeUtil;
 import com.bjpowernode.crm.utils.SqlSessionUtil;
 
 import java.util.HashMap;
+import java.util.List;
 /**
  * 类加载器顺序：启动类加载器 -> 扩展类加载器 -> 应用类加载器 -> 用户自定义类加载器
  * <p>
@@ -64,4 +65,10 @@ public class UserServiceImpl implements UserService {
          */
         return user;
     }
+
+    @Override
+    public List<User> getUserList() {
+        return userDao.getUserList();
+    }
+
 }

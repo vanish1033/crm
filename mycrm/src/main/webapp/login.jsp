@@ -12,6 +12,12 @@
 
         $(function () {
 
+            //如果当前窗口不是顶层窗口
+            if (window.top != window) {
+                //将顶层窗口设置为当前窗口
+                window.top.location = window.location;
+            }
+
             //页面加载完成后将用户名清空
             $("#loginAct").val("");
 
@@ -56,17 +62,17 @@
             }
 
             $.ajax({
-                "url": "settings/user/login.do",
-                "data": {
-                    "loginAct": loginAct,
-                    "loginPwd": loginPwd
+                url: "settings/user/login.do",
+                data: {
+                    loginAct: loginAct,
+                    loginPwd: loginPwd
                 },
-                "dataType": "json",
-                "type": "post",
-                "success": function (data) {// {"success":true,"message":?}
+                dataType: "json",
+                type: "post",
+                success: function (data) {// {"success":true,"message":?}
                     if (data.success == true) {
                         // 跳转页面
-                        window.location.href = "workbench/index.html";
+                        window.location.href = "workbench/index.jsp";
                     } else {
                         // 登录失败
                         $("#msg").html("<font color='red'>" + data.message + "</font>");
@@ -92,7 +98,7 @@
         <div class="page-header">
             <h1>登录</h1>
         </div>
-        <form action="workbench/index.html" class="form-horizontal" role="form">
+        <form action="workbench/index.jsp" class="form-horizontal" role="form">
             <div class="form-group form-group-lg">
                 <div style="width: 350px;">
                     <input class="form-control" id="loginAct" type="text" placeholder="用户名">
