@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ActivityServlet extends HttpServlet {
     @Override
@@ -32,8 +33,13 @@ public class ActivityServlet extends HttpServlet {
             getActivityList(request, response);
         } else if ("/workbench/Activity/deleteActivity.do".equals(servletPath)) {
             deleteActivity(request, response);
+        } else if ("/workbench/Activity/selectActivityAndUserList.do".equals(servletPath)) {
+            selectActivityAndUserList(request, response);
+        } else if ("/workbench/Activity/updateActivity.do".equals(servletPath)) {
+            updateActivity(request, response);
         }
     }
+
 
     private void deleteActivity(HttpServletRequest request, HttpServletResponse response) {
         String[] ids = request.getParameterValues("id");
@@ -106,5 +112,52 @@ public class ActivityServlet extends HttpServlet {
         System.out.println(activityListVo);
         PrintJson.printJsonObj(response, activityListVo);
 
+    }
+
+    /**
+     * 查询userList和Activity放到修改Activity的模态窗口里
+     *
+     * @param request
+     * @param response
+     */
+    private void selectActivityAndUserList(HttpServletRequest request, HttpServletResponse response) {
+        String id = request.getParameter("id");
+        ActivityService proxyInstance = (ActivityService) ProxyFactory.getProxyInstance(ActivityServiceImpl.class);
+        Map<String, Object> map = proxyInstance.selectActivityAndUserList(id);
+        PrintJson.printJsonObj(response, map);
+    }
+
+    /**
+     * 修改Activity的信息
+     *
+     * @param request
+     * @param response
+     */
+    private void updateActivity(HttpServletRequest request, HttpServletResponse response) {
+        // 取值
+        String id = request.getParameter("id");
+        String owner = request.getParameter("owner");
+        String name = request.getParameter("name");
+        String startDate = request.getParameter("startDate");
+        String endDate = request.getParameter("endDate");
+        String cost = request.getParameter("cost");
+        String description = request.getParameter("describe");
+
+        // 封装为Activity对象
+        Activity activity = new Activity();
+        activity.setId(id);
+        activity.setOwner(owner);
+        activity.setName(name);
+        activity.setStartDate(startDate);
+        activity.setEndDate(endDate);
+        activity.setCost(cost);
+        activity.setDescription(description);
+        activity.setEditTime(DateTimeUtil.getSysTime());
+        activity.setEditBy(((User) request.getSession().getAttribute("user")).getName());
+        System.out.println(activity);
+
+        ActivityService proxyInstance = (ActivityService) ProxyFactory.getProxyInstance(ActivityServiceImpl.class);
+        boolean flag = proxyInstance.updateActivity(activity);
+        PrintJson.printJsonFlag(response, flag);
     }
 }

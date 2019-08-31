@@ -64,13 +64,13 @@
                 and name like '%' #{name} '%'
             </if>
             <if test="owner!=null and owner!=''">
-                and tu.name like '%' #{owner} '%'
+                and owner like '%' #{owner} '%'
             </if>
             <if test="startDate!=null and startDate!=''">
-                and ta.startDate &gt; #{startDate}
+                and startDate &gt; #{startDate}
             </if>
             <if test="endDate!=null and endDate!=''">
-                and ta.endDate &lt; #{endDate}
+                and endDate &lt; #{endDate}
             </if>
         </where>
     </select>
@@ -86,6 +86,28 @@
 
         </foreach>
     </delete>
+
+
+    <select id="selectActivityById" resultType="com.bjpowernode.crm.workbench.domain.Activity">
+        select * from tbl_activity where id=#{id}
+    </select>
+
+    <update id="updateActivity">
+        update tbl_activity
+
+         set
+         owner=#{owner},
+         name=#{name},
+         startDate=#{startDate},
+         endDate=#{endDate},
+         cost=#{cost},
+         description=#{description},
+         editTime=#{editTime},
+         editBy=#{editBy}
+
+        where id=#{id}
+
+    </update>
 </mapper>
 
 

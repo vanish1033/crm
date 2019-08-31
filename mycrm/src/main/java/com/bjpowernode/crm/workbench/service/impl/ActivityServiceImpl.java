@@ -1,5 +1,7 @@
 package com.bjpowernode.crm.workbench.service.impl;
 
+import com.bjpowernode.crm.settings.dao.UserDao;
+import com.bjpowernode.crm.settings.domain.User;
 import com.bjpowernode.crm.utils.SqlSessionUtil;
 import com.bjpowernode.crm.workbench.dao.ActivityDao;
 import com.bjpowernode.crm.workbench.dao.ActivityRemarkDao;
@@ -9,6 +11,7 @@ import com.bjpowernode.crm.workbench.service.ActivityService;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author:whr 2019/8/30
@@ -16,6 +19,7 @@ import java.util.List;
 public class ActivityServiceImpl implements ActivityService {
     ActivityDao activityDao = SqlSessionUtil.getSqlSession().getMapper(ActivityDao.class);
     ActivityRemarkDao activityRemarkDao = SqlSessionUtil.getSqlSession().getMapper(ActivityRemarkDao.class);
+    UserDao userDao = SqlSessionUtil.getSqlSession().getMapper(UserDao.class);
 
     @Override
     public boolean saveActivity(Activity activity) {
@@ -55,5 +59,28 @@ public class ActivityServiceImpl implements ActivityService {
         flag = (count1 == count2) && count3 == ids.length;
 
         return flag;
+    }
+
+
+    @Override
+    public Map<String, Object> selectActivityAndUserList(String id) {
+        // 先查询userList
+        List<User> userList = userDao.getUserList();
+
+        // 再查Activity
+        Activity activity = activityDao.selectActivityById(id);
+
+        // 封装为HashMap
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("userList", userList);
+        map.put("Activity", activity);
+        return map;
+    }
+
+
+    @Override
+    public boolean updateActivity(Activity activity) {
+        int count = activityDao.updateActivity(activity);
+        return count == 1;
     }
 }

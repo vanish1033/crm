@@ -86,7 +86,7 @@
                          */
                         if (data.success) {
                             // 刷新Activity列表
-                            getActivityList(1, 3);
+                            getActivityList(1, $("#activityPage").bs_pagination('getOption', 'rowsPerPage'));
                             //添加成功就关闭模态窗口
                             $("#createActivityModal").modal("hide");
                         } else {
@@ -157,7 +157,7 @@
                         dataType: "json",
                         success: function (data) {
                             if (data.success) {
-                                getActivityList(1, 3);
+                                getActivityList(1, $("#activityPage").bs_pagination('getOption', 'rowsPerPage'));
                                 return;
                             }
                             alert("删除失败");
@@ -165,6 +165,83 @@
                     })
                 }
             });
+
+            /**
+             为修改Activity按钮绑定事件
+             */
+            $("#editActivity").click(function () {
+                // 判断用户选中了几个Activity，并给出提示
+                var length = $(":checkbox[name=xz]:checked").length;
+                if (length != 1) {
+                    alert("请确保选且只选中了一个要修改的活动");
+                    return false;
+                }
+
+                // 先查询userList放到select下拉框里
+                // 再查询Activity相关数据铺到模态窗口里
+                $.ajax({
+                    url: "workbench/Activity/selectActivityAndUserList.do",
+                    data: {"id": $(":checkbox[name=xz]:checked").val()},
+                    type: "get",
+                    dataType: "json",
+                    success: function (data) {
+                        // data {"userList":[{},{}...],"Activity":{}}
+                        // 先铺select下拉框
+                        var html = "";
+                        $.each(data.userList, function (i, n) {
+                            html += "<option value=" + n.id + ">" + n.name + "</option>";
+                        });
+                        $("#edit-marketActivityOwner").html(html);
+
+                        // 再铺Activity数据
+                        $("#edit-marketActivityOwner").val(data.Activity.owner);
+                        $("#edit-marketActivityName").val(data.Activity.name);
+                        $("#edit-startDate").val(data.Activity.startDate);
+                        $("#edit-endDate").val(data.Activity.endDate);
+                        $("#edit-cost").val(data.Activity.cost);
+                        $("#edit-describe").val(data.Activity.description);
+                        $("#edit-id").val(data.Activity.id);
+                    }
+                });
+                // 最后再打开模态窗口
+                $("#editActivityModal").modal("show");
+            });
+
+            /**
+             为提交修改Activity按钮绑定事件
+             */
+            $("#updateBtn").click(function () {
+                $.ajax({
+                    url: "workbench/Activity/updateActivity.do",
+                    data: {
+                        "id": $("#edit-id").val(),
+                        "owner": $("#edit-marketActivityOwner").val(),
+                        "name": $("#edit-marketActivityName").val(),
+                        "startDate": $("#edit-startDate").val(),
+                        "endDate": $("#edit-endDate").val(),
+                        "cost": $("#edit-cost").val(),
+                        "describe": $("#edit-describe").val()
+                    },
+                    type: "post",
+                    dataType: "json",
+                    success: function (data) {
+
+                        if (data.success) {
+                            getActivityList(
+                                $("#activityPage").bs_pagination('getOption', 'currentPage')
+                                , $("#activityPage").bs_pagination('getOption', 'rowsPerPage')
+                            );
+
+                            $("#editActivityModal").modal("hide");
+
+                        } else {
+                            alert("修改失败");
+                        }
+
+                    }
+                })
+            })
+
         });
 
         /**
@@ -317,14 +394,16 @@
 
                 <form class="form-horizontal" role="form">
 
+                    <input type="hidden" id="edit-id"/>
+
                     <div class="form-group">
                         <label for="edit-marketActivityOwner" class="col-sm-2 control-label">所有者<span
                                 style="font-size: 15px; color: red;">*</span></label>
                         <div class="col-sm-10" style="width: 300px;">
                             <select class="form-control" id="edit-marketActivityOwner">
-                                <option>zhangsan</option>
-                                <option>lisi</option>
-                                <option>wangwu</option>
+                                <%--                                <option>zhangsan</option>--%>
+                                <%--                                <option>lisi</option>--%>
+                                <%--                                <option>wangwu</option>--%>
                             </select>
                         </div>
                         <label for="edit-marketActivityName" class="col-sm-2 control-label">名称<span
@@ -335,13 +414,13 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="edit-startTime" class="col-sm-2 control-label">开始日期</label>
+                        <label for="edit-startDate" class="col-sm-2 control-label">开始日期</label>
                         <div class="col-sm-10" style="width: 300px;">
-                            <input type="text" class="form-control" id="edit-startTime" value="2020-10-10">
+                            <input type="text" class="form-control" id="edit-startDate" value="2020-10-10">
                         </div>
-                        <label for="edit-endTime" class="col-sm-2 control-label">结束日期</label>
+                        <label for="edit-endDate" class="col-sm-2 control-label">结束日期</label>
                         <div class="col-sm-10" style="width: 300px;">
-                            <input type="text" class="form-control" id="edit-endTime" value="2020-10-20">
+                            <input type="text" class="form-control" id="edit-endDate" value="2020-10-20">
                         </div>
                     </div>
 
@@ -364,7 +443,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">更新</button>
+                <button type="button" class="btn btn-primary" id="updateBtn">更新</button>
             </div>
         </div>
     </div>
@@ -422,7 +501,7 @@
                 <button type="button" class="btn btn-primary" id="addActivity">
                     <span class="glyphicon glyphicon-plus"></span> 创建
                 </button>
-                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#editActivityModal"><span
+                <button type="button" class="btn btn-default" id="editActivity"><span
                         class="glyphicon glyphicon-pencil"></span> 修改
                 </button>
                 <button type="button" id="deleteBtn" class="btn btn-danger"><span

@@ -18,4 +18,9 @@ public interface ActivityDao {
     int getTotal(HashMap<String, Object> map);
 
     int deleteById(String[] ids);
+
+    Activity selectActivityById(String id);
+
+    int updateActivity(Activity activity);
+
 }
