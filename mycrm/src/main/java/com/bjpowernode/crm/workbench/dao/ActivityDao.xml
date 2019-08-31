@@ -29,6 +29,63 @@
         )
     </insert>
 
+    <select id="getActivityList" resultType="com.bjpowernode.crm.workbench.domain.Activity">
+        SELECT
+        ta.id, ta.name, tu.name as owner, ta.startDate, ta.endDate
+        FROM
+        tbl_activity ta
+        JOIN tbl_user tu ON ta.OWNER = tu.id
+
+        <where>
+            <if test="name!=null and name!=''">
+                and ta.name like '%' #{name} '%'
+            </if>
+            <if test="owner!=null and owner!=''">
+                and tu.name like '%' #{owner} '%'
+            </if>
+            <if test="startDate!=null and startDate!=''">
+                and ta.startDate &gt; #{startDate}
+            </if>
+            <if test="endDate!=null and endDate!=''">
+                and ta.endDate &lt; #{endDate}
+            </if>
+        </where>
+
+        order by ta.createTime desc
+        limit #{skipCount}, #{pageSize}
+
+    </select>
+
+    <select id="getTotal" resultType="int">
+        select count(*)
+        from tbl_activity
+        <where>
+            <if test="name!=null and name!=''">
+                and name like '%' #{name} '%'
+            </if>
+            <if test="owner!=null and owner!=''">
+                and tu.name like '%' #{owner} '%'
+            </if>
+            <if test="startDate!=null and startDate!=''">
+                and ta.startDate &gt; #{startDate}
+            </if>
+            <if test="endDate!=null and endDate!=''">
+                and ta.endDate &lt; #{endDate}
+            </if>
+        </where>
+    </select>
+
+
+    <delete id="deleteById">
+        delete
+        from tbl_activity
+        where id in
+        <foreach collection="array" item="item" open="(" close=")" separator=",">
+
+            #{item}
+
+        </foreach>
+    </delete>
 </mapper>
 
 

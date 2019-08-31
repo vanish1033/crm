@@ -8,17 +8,17 @@ import lombok.Data;
 @Data
 public class Activity {
 
-    String id;  //编号
-    String owner;   //所有者，在数据库中存的是user表的id
-    String name;    //市场活动的名称
+    String id;          //编号
+    String owner;       //所有者，在数据库中存的是user表的id
+    String name;        //市场活动的名称
     String startDate;   //活动开始时间
-    String endDate; //活动结束的时间
-    String cost;    //活动的成本
+    String endDate;     //活动结束的时间
+    String cost;        //活动的成本
     String description; //活动的描述
     String createTime;  //创建时间
     String createBy;    //创建者
     String editTime;    //修改时间
-    String editBy;  //修改人
+    String editBy;      //修改人
 
     // 无参构造
     public Activity() {

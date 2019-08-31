@@ -2,6 +2,9 @@ package com.bjpowernode.crm.workbench.dao;
 
 import com.bjpowernode.crm.workbench.domain.Activity;
 
+import java.util.HashMap;
+import java.util.List;
+
 /**
  * @author:whr 2019/8/30
  */
@@ -10,4 +13,9 @@ public interface ActivityDao {
 
     int saveActivity(Activity activity);
 
+    List<Activity> getActivityList(HashMap<String, Object> map);
+
+    int getTotal(HashMap<String, Object> map);
+
+    int deleteById(String[] ids);
 }

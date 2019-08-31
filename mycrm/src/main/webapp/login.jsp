@@ -21,6 +21,9 @@
             //页面加载完成后将用户名清空
             $("#loginAct").val("");
 
+            //让用户名输入框获得焦点
+            $("#loginAct").focus();
+
             // 为提交按钮绑定登录事件
             $("#submit").click(function () {
                 login();

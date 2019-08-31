@@ -50,5 +50,7 @@
         <servlet-name>ActivityServlet</servlet-name>
         <url-pattern>/workbench/Activity/getUserList.do</url-pattern>
         <url-pattern>/workbench/Activity/saveActivity.do</url-pattern>
+        <url-pattern>/workbench/Activity/getActivityList.do</url-pattern>
+        <url-pattern>/workbench/Activity/deleteActivity.do</url-pattern>
     </servlet-mapping>
 </web-app>

@@ -14,7 +14,6 @@
 
 
         $.ajax({
-
             url: "",
             data: {},
             type: "",
@@ -22,7 +21,6 @@
             success: function (data) {
 
             }
-
         })
 
     </script>

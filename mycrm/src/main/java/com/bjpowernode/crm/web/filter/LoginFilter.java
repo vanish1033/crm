@@ -12,7 +12,7 @@ public class LoginFilter implements Filter {
         // 和登录相关的需求直接放行
         if ("/settings/user/login.do".equals(((HttpServletRequest) req).getServletPath()) ||
                 "/login.jsp".equals(((HttpServletRequest) req).getServletPath())) {
-            System.out.println("放行login");
+//            System.out.println("放行login");
             chain.doFilter(req, resp);
             return;
         }
@@ -20,10 +20,11 @@ public class LoginFilter implements Filter {
         // 如果有session也放行
         if (((HttpServletRequest) req).getSession(false) != null) {
             chain.doFilter(req, resp);
-            System.out.println("放行session");
+//            System.out.println("放行session");
             return;
         }
 
+        // 打回登录页面
         ((HttpServletResponse) resp).sendRedirect(((HttpServletRequest) req).getContextPath() + "/login.jsp");
     }
 
