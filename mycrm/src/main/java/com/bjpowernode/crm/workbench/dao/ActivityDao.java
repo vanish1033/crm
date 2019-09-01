@@ -10,7 +10,6 @@ import java.util.List;
  */
 public interface ActivityDao {
 
-
     int saveActivity(Activity activity);
 
     List<Activity> getActivityList(HashMap<String, Object> map);

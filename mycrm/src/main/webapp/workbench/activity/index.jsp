@@ -115,7 +115,7 @@
              * 为全选框绑定事件
              */
             $("#checkAll").click(function () {
-                $(":checkbox[name=xz]").prop("checked", this.checked);
+                $(":checkbox[name=xz]").prop("checked", $(this).prop("checked"));
             });
 
             /**
@@ -226,6 +226,7 @@
                     dataType: "json",
                     success: function (data) {
 
+                        // 修改成功
                         if (data.success) {
                             getActivityList(
                                 $("#activityPage").bs_pagination('getOption', 'currentPage')
@@ -245,7 +246,7 @@
         });
 
         /**
-         * 查询Activity数据的方法
+         * 刷新页面下方Activity分页数据的方法
          */
         function getActivityList(pageNo, pageSize) {
 
@@ -282,22 +283,22 @@
                     // 计算总页数
                     var totalPages = data.total % pageSize == 0 ? data.total / pageSize : parseInt(data.total / pageSize) + 1;
 
-                    //以上列表数据处理完毕之后，添加bs_pagination分页插件
+                    // 以上列表数据处理完毕之后，添加bs_pagination分页插件
                     $("#activityPage").bs_pagination({
-                        currentPage: pageNo, // 页码
-                        rowsPerPage: pageSize, // 每页显示的记录条数
-                        maxRowsPerPage: 20, // 每页最多显示的记录条数
+                        currentPage: pageNo,    // 页码
+                        rowsPerPage: pageSize,  // 每页显示的记录条数
+                        maxRowsPerPage: 20,     // 每页最多显示的记录条数
                         totalPages: totalPages, // 总页数
-                        totalRows: data.total, // 总记录条数
+                        totalRows: data.total,  // 总记录条数
 
-                        visiblePageLinks: 4, // 显示几个卡片
+                        visiblePageLinks: 4,    // 显示几个卡片
 
                         showGoToPage: true,
                         showRowsPerPage: true,
                         showRowsInfo: true,
                         showRowsDefaultInfo: true,
 
-                        //以下函数的触发时机是在，当我们点击了分页组件后，触发该方法
+                        // 以下函数的触发时机是在，当我们点击了分页组件后，触发该方法
                         onChangePage: function (event, data) {
                             getActivityList(data.currentPage, data.rowsPerPage);
                         }
@@ -416,11 +417,11 @@
                     <div class="form-group">
                         <label for="edit-startDate" class="col-sm-2 control-label">开始日期</label>
                         <div class="col-sm-10" style="width: 300px;">
-                            <input type="text" class="form-control" id="edit-startDate" value="2020-10-10">
+                            <input type="text" class="form-control time" id="edit-startDate" value="2020-10-10">
                         </div>
                         <label for="edit-endDate" class="col-sm-2 control-label">结束日期</label>
                         <div class="col-sm-10" style="width: 300px;">
-                            <input type="text" class="form-control" id="edit-endDate" value="2020-10-20">
+                            <input type="text" class="form-control time" id="edit-endDate" value="2020-10-20">
                         </div>
                     </div>
 
@@ -481,13 +482,13 @@
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-addon">开始日期</div>
-                        <input class="form-control" type="text" id="search-startDate"/>
+                        <input class="form-control time" type="text" id="search-startDate"/>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-addon">结束日期</div>
-                        <input class="form-control" type="text" id="search-endDate">
+                        <input class="form-control time" type="text" id="search-endDate">
                     </div>
                 </div>
 

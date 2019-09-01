@@ -34,7 +34,7 @@
         ta.id, ta.name, tu.name as owner, ta.startDate, ta.endDate
         FROM
         tbl_activity ta
-        JOIN tbl_user tu ON ta.OWNER = tu.id
+        left JOIN tbl_user tu ON ta.OWNER = tu.id
 
         <where>
             <if test="name!=null and name!=''">
