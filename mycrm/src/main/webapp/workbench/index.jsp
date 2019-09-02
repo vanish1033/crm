@@ -180,13 +180,13 @@
                     class="glyphicon glyphicon-user"></span> 客户公海</a></li>
             <li class="liClass"><a href="workbench/activity/index.jsp" target="workareaFrame"><span
                     class="glyphicon glyphicon-play-circle"></span> 市场活动</a></li>
-            <li class="liClass"><a href="workbench/clue/index.html" target="workareaFrame"><span
+            <li class="liClass"><a href="workbench/clue/index.jsp" target="workareaFrame"><span
                     class="glyphicon glyphicon-search"></span> 线索（潜在客户）</a></li>
             <li class="liClass"><a href="workbench/customer/index.html" target="workareaFrame"><span
                     class="glyphicon glyphicon-user"></span> 客户</a></li>
             <li class="liClass"><a href="workbench/contacts/index.html" target="workareaFrame"><span
                     class="glyphicon glyphicon-earphone"></span> 联系人</a></li>
-            <li class="liClass"><a href="workbench/transaction/index.html" target="workareaFrame"><span
+            <li class="liClass"><a href="workbench/transaction/index.jsp" target="workareaFrame"><span
                     class="glyphicon glyphicon-usd"></span> 交易（商机）</a></li>
             <li class="liClass"><a href="visit/index.html" target="workareaFrame"><span
                     class="glyphicon glyphicon-phone-alt"></span> 售后回访</a></li>

@@ -5,6 +5,9 @@
          version="3.1">
 
     <display-name>crm</display-name>
+    <listener>
+        <listener-class>com.bjpowernode.crm.web.listener.SysInitListener</listener-class>
+    </listener>
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>
@@ -60,6 +63,16 @@
         <url-pattern>/workbench/activity/deleteRemark.do</url-pattern>
         <url-pattern>/workbench/activity/updateRemark.do</url-pattern>
         <url-pattern>/workbench/activity/saveRemark.do</url-pattern>
+    </servlet-mapping>
+
+    <!--   线索(Clue)模块 <servlet>-->
+    <servlet>
+        <servlet-name>ClueServletServlet</servlet-name>
+        <servlet-class>com.bjpowernode.crm.workbench.web.controller.ClueServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ClueServletServlet</servlet-name>
+        <url-pattern>/workbench/Clue/xxx.do</url-pattern>
     </servlet-mapping>
 
 </web-app>
