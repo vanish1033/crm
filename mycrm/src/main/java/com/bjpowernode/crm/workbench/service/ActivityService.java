@@ -1,9 +1,11 @@
 package com.bjpowernode.crm.workbench.service;
 
 import com.bjpowernode.crm.workbench.domain.Activity;
+import com.bjpowernode.crm.workbench.domain.ActivityRemark;
 import com.bjpowernode.crm.workbench.domain.DataListVo;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -21,4 +23,13 @@ public interface ActivityService {
 
     boolean updateActivity(Activity activity);
 
+    Activity detail(String id);
+
+    List<ActivityRemark> getRemarkListByAid(String aid);
+
+    boolean deleteRemark(String rid);
+
+    boolean updateRemark(String id, String noteContent, String sysTime, String userName);
+
+    boolean saveRemark(ActivityRemark activityRemark);
 }

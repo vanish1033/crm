@@ -6,6 +6,7 @@ import com.bjpowernode.crm.utils.SqlSessionUtil;
 import com.bjpowernode.crm.workbench.dao.ActivityDao;
 import com.bjpowernode.crm.workbench.dao.ActivityRemarkDao;
 import com.bjpowernode.crm.workbench.domain.Activity;
+import com.bjpowernode.crm.workbench.domain.ActivityRemark;
 import com.bjpowernode.crm.workbench.domain.DataListVo;
 import com.bjpowernode.crm.workbench.service.ActivityService;
 
@@ -82,5 +83,43 @@ public class ActivityServiceImpl implements ActivityService {
     public boolean updateActivity(Activity activity) {
         int count = activityDao.updateActivity(activity);
         return count == 1;
+    }
+
+    @Override
+    public Activity detail(String id) {
+
+        Activity activity = activityDao.detail(id);
+
+        return activity;
+    }
+
+    @Override
+    public List<ActivityRemark> getRemarkListByAid(String aid) {
+        return activityRemarkDao.getRemarkListByAid(aid);
+    }
+
+    @Override
+    public boolean deleteRemark(String rid) {
+
+        return activityRemarkDao.deleteRemarkById(rid) == 1;
+    }
+
+    @Override
+    public boolean updateRemark(String id, String noteContent, String sysTime, String userName) {
+
+        HashMap<String, String> map = new HashMap<>();
+        map.put("id", id);
+        map.put("noteContent", noteContent);
+        map.put("editTime", sysTime);
+        map.put("editBy", userName);
+        boolean flag = activityRemarkDao.updateRemark(map) == 1;
+
+        return flag;
+    }
+
+    @Override
+    public boolean saveRemark(ActivityRemark activityRemark) {
+
+        return activityRemarkDao.saveRemark(activityRemark) == 1;
     }
 }

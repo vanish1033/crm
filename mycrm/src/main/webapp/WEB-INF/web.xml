@@ -30,6 +30,7 @@
         <url-pattern>*.jsp</url-pattern>
     </filter-mapping>
 
+
     <!--   user模块 <servlet>-->
     <servlet>
         <servlet-name>UserController</servlet-name>
@@ -54,5 +55,11 @@
         <url-pattern>/workbench/Activity/deleteActivity.do</url-pattern>
         <url-pattern>/workbench/Activity/selectActivityAndUserList.do</url-pattern>
         <url-pattern>/workbench/Activity/updateActivity.do</url-pattern>
+        <url-pattern>/workbench/activity/detail.do</url-pattern>
+        <url-pattern>/workbench/activity/getRemarkListByAid.do</url-pattern>
+        <url-pattern>/workbench/activity/deleteRemark.do</url-pattern>
+        <url-pattern>/workbench/activity/updateRemark.do</url-pattern>
+        <url-pattern>/workbench/activity/saveRemark.do</url-pattern>
     </servlet-mapping>
+
 </web-app>

@@ -8,6 +8,7 @@ import com.bjpowernode.crm.utils.PrintJson;
 import com.bjpowernode.crm.utils.ProxyFactory;
 import com.bjpowernode.crm.utils.UUIDUtil;
 import com.bjpowernode.crm.workbench.domain.Activity;
+import com.bjpowernode.crm.workbench.domain.ActivityRemark;
 import com.bjpowernode.crm.workbench.domain.DataListVo;
 import com.bjpowernode.crm.workbench.service.ActivityService;
 import com.bjpowernode.crm.workbench.service.impl.ActivityServiceImpl;
@@ -24,7 +25,9 @@ import java.util.Map;
 public class ActivityServlet extends HttpServlet {
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
         String servletPath = request.getServletPath();
+        System.out.println(servletPath);
         if ("/workbench/Activity/getUserList.do".equals(servletPath)) {
             getUserList(request, response);
         } else if ("/workbench/Activity/saveActivity.do".equals(servletPath)) {
@@ -37,6 +40,16 @@ public class ActivityServlet extends HttpServlet {
             selectActivityAndUserList(request, response);
         } else if ("/workbench/Activity/updateActivity.do".equals(servletPath)) {
             updateActivity(request, response);
+        } else if ("/workbench/activity/detail.do".equals(servletPath)) {
+            detail(request, response);
+        } else if ("/workbench/activity/getRemarkListByAid.do".equals(servletPath)) {
+            getRemarkListByAid(request, response);
+        } else if ("/workbench/activity/deleteRemark.do".equals(servletPath)) {
+            deleteRemark(request, response);
+        } else if ("/workbench/activity/updateRemark.do".equals(servletPath)) {
+            updateRemark(request, response);
+        } else if ("/workbench/activity/saveRemark.do".equals(servletPath)) {
+            saveRemark(request, response);
         }
     }
 
@@ -68,6 +81,8 @@ public class ActivityServlet extends HttpServlet {
      * @param response
      */
     private void saveActivity(HttpServletRequest request, HttpServletResponse response) {
+
+        //<editor-fold desc="获取参数">
         String id = UUIDUtil.getUUID();
         String owner = request.getParameter("owner");
         String name = request.getParameter("name");
@@ -77,6 +92,9 @@ public class ActivityServlet extends HttpServlet {
         String description = request.getParameter("description");
         String createTime = DateTimeUtil.getSysTime();
         String createBy = ((User) request.getSession().getAttribute("user")).getName();
+        //</editor-fold>
+
+        // 将参数封装到Activity中
         Activity activity = new Activity(id, owner, name, startDate, endDate, cost, description, createTime, createBy, null, null);
         ActivityService proxyInstance = (ActivityService) ProxyFactory.getProxyInstance(ActivityServiceImpl.class);
         boolean flag = proxyInstance.saveActivity(activity);
@@ -91,25 +109,29 @@ public class ActivityServlet extends HttpServlet {
      * @param response
      */
     private void getActivityList(HttpServletRequest request, HttpServletResponse response) {
+        //<editor-fold desc="获取前端传来的数据">
         Integer pageNo = Integer.valueOf(request.getParameter("pageNo"));
         Integer pageSize = Integer.valueOf(request.getParameter("pageSize"));
         String name = request.getParameter("name");
         String owner = request.getParameter("owner");
         String startDate = request.getParameter("startDate");
         String endDate = request.getParameter("endDate");
+        //</editor-fold>
 
         int skipCount = (pageNo - 1) * pageSize;
 
         HashMap<String, Object> map = new HashMap<>();
+        //<editor-fold desc="将前端传来的数据封装到map里">
         map.put("skipCount", skipCount);
         map.put("pageSize", pageSize);
         map.put("name", name);
         map.put("owner", owner);
         map.put("startDate", startDate);
         map.put("endDate", endDate);
+        //</editor-fold>
+
         ActivityService proxyInstance = (ActivityService) ProxyFactory.getProxyInstance(ActivityServiceImpl.class);
         DataListVo<Activity> activityListVo = proxyInstance.getActivityList(map);
-        System.out.println(activityListVo);
         PrintJson.printJsonObj(response, activityListVo);
 
     }
@@ -154,10 +176,84 @@ public class ActivityServlet extends HttpServlet {
         activity.setDescription(description);
         activity.setEditTime(DateTimeUtil.getSysTime());
         activity.setEditBy(((User) request.getSession().getAttribute("user")).getName());
-        System.out.println(activity);
 
         ActivityService proxyInstance = (ActivityService) ProxyFactory.getProxyInstance(ActivityServiceImpl.class);
         boolean flag = proxyInstance.updateActivity(activity);
         PrintJson.printJsonFlag(response, flag);
     }
+
+    /**
+     * 展示市场活动详情页面
+     *
+     * @param request
+     * @param response
+     */
+    private void detail(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("备注");
+        String id = request.getParameter("id");
+
+        ActivityService proxyInstance = (ActivityService) ProxyFactory.getProxyInstance(ActivityServiceImpl.class);
+
+        Activity a = proxyInstance.detail(id);
+
+        request.setAttribute("a", a);
+
+        System.out.println("备注" + a);
+        request.getRequestDispatcher("/workbench/activity/detail.jsp").forward(request, response);
+    }
+
+    private void getRemarkListByAid(HttpServletRequest request, HttpServletResponse response) {
+        String aid = request.getParameter("Aid");
+        ActivityService proxyInstance = (ActivityService) ProxyFactory.getProxyInstance(ActivityServiceImpl.class);
+        List<ActivityRemark> remarkList = proxyInstance.getRemarkListByAid(aid);
+        PrintJson.printJsonObj(response, remarkList);
+    }
+
+    /**
+     * 删除市场活动备注
+     *
+     * @param request
+     * @param response
+     */
+    private void deleteRemark(HttpServletRequest request, HttpServletResponse response) {
+        String rid = request.getParameter("rid");
+        ActivityService proxyInstance = (ActivityService) ProxyFactory.getProxyInstance(ActivityServiceImpl.class);
+        boolean flag = proxyInstance.deleteRemark(rid);
+        PrintJson.printJsonFlag(response, flag);
+    }
+
+    private void updateRemark(HttpServletRequest request, HttpServletResponse response) {
+        String id = request.getParameter("id");
+        String noteContent = request.getParameter("noteContent");
+        String sysTime = DateTimeUtil.getSysTime();
+        String userName = ((User) request.getSession().getAttribute("user")).getName();
+
+        ActivityService proxyInstance = (ActivityService) ProxyFactory.getProxyInstance(ActivityServiceImpl.class);
+        boolean flag = proxyInstance.updateRemark(id, noteContent, sysTime, userName);
+        PrintJson.printJsonFlag(response, flag);
+    }
+
+
+    private void saveRemark(HttpServletRequest request, HttpServletResponse response) {
+
+        String activityId = request.getParameter("activityId");
+        String noteContent = request.getParameter("noteContent");
+        String id = UUIDUtil.getUUID();
+        String createTime = DateTimeUtil.getSysTime();
+        String createBy = ((User) request.getSession().getAttribute("user")).getName();
+        String editFlag = "0";
+
+        ActivityRemark activityRemark = new ActivityRemark(id, noteContent, createTime, createBy, null, null, editFlag, activityId);
+
+
+        ActivityService proxyInstance = (ActivityService) ProxyFactory.getProxyInstance(ActivityServiceImpl.class);
+        boolean flag = proxyInstance.saveRemark(activityRemark);
+        Map<String, Object> map = new HashMap<>();
+        map.put("success", flag);
+        map.put("ar", activityRemark);
+        PrintJson.printJsonObj(response, map);
+    }
 }
+
+
+
