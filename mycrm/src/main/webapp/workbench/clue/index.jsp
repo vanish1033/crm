@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <!DOCTYPE html>
@@ -20,7 +21,26 @@
     <script type="text/javascript">
 
         $(function () {
+            $("#addBtn").click(function () {
+                $.ajax({
+                    url: "workbench/clue/getUserList.do",
+                    type: "get",
+                    dataType: "json",
+                    success: function (data) {
+                        var html = "";
+                        $.each(data, function (i, n) {
+                            html += "<option value='" + n.id + "'>" + n.name + "</option>";
+                        });
+                        $("#create-clueOwner").html(html);
 
+                        // 让所有者下拉框有默认值————>即为当前登录的用户
+                        $("#create-clueOwner").val("${user.id}");
+
+                        // 数据准备完成就打开模态窗口
+                        $("#createClueModal").modal("show");
+                    }
+                })
+            });
 
         });
 
@@ -62,12 +82,15 @@
                         <label for="create-call" class="col-sm-2 control-label">称呼</label>
                         <div class="col-sm-10" style="width: 300px;">
                             <select class="form-control" id="create-call">
-                                <option></option>
-                                <option>先生</option>
-                                <option>夫人</option>
-                                <option>女士</option>
-                                <option>博士</option>
-                                <option>教授</option>
+                                <c:forEach var="call" items="${appellationList}">
+                                    <option value="${call.value}">${call.text}</option>
+                                </c:forEach>
+                                <%--                                <option></option>--%>
+                                <%--                                <option>先生</option>--%>
+                                <%--                                <option>夫人</option>--%>
+                                <%--                                <option>女士</option>--%>
+                                <%--                                <option>博士</option>--%>
+                                <%--                                <option>教授</option>--%>
                             </select>
                         </div>
                         <label for="create-surname" class="col-sm-2 control-label">姓名<span
@@ -448,7 +471,7 @@
         <div class="btn-toolbar" role="toolbar"
              style="background-color: #F7F7F7; height: 50px; position: relative;top: 40px;">
             <div class="btn-group" style="position: relative; top: 18%;">
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createClueModal"><span
+                <button type="button" class="btn btn-primary" id="addBtn"><span
                         class="glyphicon glyphicon-plus"></span> 创建
                 </button>
                 <button type="button" class="btn btn-default" data-toggle="modal" data-target="#editClueModal"><span

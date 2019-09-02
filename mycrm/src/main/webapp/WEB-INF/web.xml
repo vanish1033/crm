@@ -72,7 +72,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>ClueServletServlet</servlet-name>
-        <url-pattern>/workbench/Clue/xxx.do</url-pattern>
+        <url-pattern>/workbench/clue/getUserList.do</url-pattern>
     </servlet-mapping>
 
 </web-app>
