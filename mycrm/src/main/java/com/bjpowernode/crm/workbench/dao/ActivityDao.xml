@@ -127,6 +127,28 @@
 
     </select>
 
+    <select id="searchActivityByName" resultType="com.bjpowernode.crm.workbench.domain.Activity">
+
+        select
+        a.id,
+        a.name,
+        a.startDate,
+        a.endDate,
+        u.name as owner
+
+        from tbl_activity a
+        join tbl_user u
+        on a.owner=u.id
+
+        where a.name like '%' #{name} '%' and
+
+        a.id not in(
+
+          select activityId from tbl_clue_activity_relation where clueId=#{cid}
+
+        )
+    </select>
+
 </mapper>
 
 

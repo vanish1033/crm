@@ -19,4 +19,8 @@ public interface ClueService {
 
     List<Activity> getActivityBycid(String cid);
 
+    boolean deleteCarById(String id);
+
+    boolean bund(String cid, String[] aids);
+
 }

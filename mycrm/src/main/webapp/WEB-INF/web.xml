@@ -77,6 +77,9 @@
         <url-pattern>/workbench/clue/getClueList.do</url-pattern>
         <url-pattern>/workbench/clue/detail.do</url-pattern>
         <url-pattern>/workbench/clue/getActivityBycid.do</url-pattern>
+        <url-pattern>/workbench/clue/deleteCarById.do</url-pattern>
+        <url-pattern>/workbench/clue/searchActivity.do</url-pattern>
+        <url-pattern>/workbench/clue/bund.do</url-pattern>
     </servlet-mapping>
 
 </web-app>

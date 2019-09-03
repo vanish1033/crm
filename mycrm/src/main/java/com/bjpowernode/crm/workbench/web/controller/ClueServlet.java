@@ -9,8 +9,11 @@ import com.bjpowernode.crm.utils.ProxyFactory;
 import com.bjpowernode.crm.utils.UUIDUtil;
 import com.bjpowernode.crm.workbench.domain.Activity;
 import com.bjpowernode.crm.workbench.domain.Clue;
+import com.bjpowernode.crm.workbench.service.ActivityService;
 import com.bjpowernode.crm.workbench.service.ClueService;
+import com.bjpowernode.crm.workbench.service.impl.ActivityServiceImpl;
 import com.bjpowernode.crm.workbench.service.impl.ClueServiceImpl;
+import jdk.nashorn.internal.ir.Flags;
 
 import javax.crypto.CipherSpi;
 import javax.servlet.ServletException;
@@ -36,6 +39,12 @@ public class ClueServlet extends HttpServlet {
             detail(request, response);
         } else if ("/workbench/clue/getActivityBycid.do".equals(servletPath)) {
             getActivityBycid(request, response);
+        } else if ("/workbench/clue/deleteCarById.do".equals(servletPath)) {
+            deleteCarById(request, response);
+        } else if ("/workbench/clue/searchActivity.do".equals(servletPath)) {
+            searchActivity(request, response);
+        } else if ("/workbench/clue/bund.do".equals(servletPath)) {
+            bund(request, response);
         }
     }
 
@@ -123,6 +132,30 @@ public class ClueServlet extends HttpServlet {
         List<Activity> activityList = proxyInstance.getActivityBycid(cid);
 
         PrintJson.printJsonObj(response, activityList);
+    }
+
+    private void deleteCarById(HttpServletRequest request, HttpServletResponse response) {
+        String id = request.getParameter("id");
+        ClueService proxyInstance = (ClueService) ProxyFactory.getProxyInstance(ClueServiceImpl.class);
+        boolean flag = proxyInstance.deleteCarById(id);
+        PrintJson.printJsonFlag(response, flag);
+    }
+
+    private void searchActivity(HttpServletRequest request, HttpServletResponse response) {
+        String name = request.getParameter("name");
+        String cid = request.getParameter("cid");
+        ActivityService proxyInstance = (ActivityService) ProxyFactory.getProxyInstance(ActivityServiceImpl.class);
+        List<Activity> activityList = proxyInstance.searchActivity(name, cid);
+        System.out.println(activityList);
+        PrintJson.printJsonObj(response, activityList);
+    }
+
+    private void bund(HttpServletRequest request, HttpServletResponse response) {
+        String cid = request.getParameter("cid");
+        String[] aids = request.getParameterValues("aid");
+        ClueService proxyInstance = (ClueService) ProxyFactory.getProxyInstance(ClueServiceImpl.class);
+        boolean flad = proxyInstance.bund(cid, aids);
+        PrintJson.printJsonFlag(response, flad);
     }
 }
 

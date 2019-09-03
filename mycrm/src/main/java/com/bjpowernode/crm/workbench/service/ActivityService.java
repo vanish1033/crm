@@ -32,4 +32,6 @@ public interface ActivityService {
     boolean updateRemark(String id, String noteContent, String sysTime, String userName);
 
     boolean saveRemark(ActivityRemark activityRemark);
+
+    List<Activity> searchActivity(String name, String cid);
 }

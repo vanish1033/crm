@@ -122,4 +122,12 @@ public class ActivityServiceImpl implements ActivityService {
 
         return activityRemarkDao.saveRemark(activityRemark) == 1;
     }
+
+    @Override
+    public List<Activity> searchActivity(String name, String cid) {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("name", name);
+        map.put("cid", cid);
+        return activityDao.searchActivityByName(map);
+    }
 }

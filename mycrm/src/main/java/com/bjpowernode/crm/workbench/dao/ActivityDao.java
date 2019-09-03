@@ -24,4 +24,6 @@ public interface ActivityDao {
 
     Activity detail(String id);
 
+    List<Activity> searchActivityByName(HashMap<String, String> map);
+
 }
