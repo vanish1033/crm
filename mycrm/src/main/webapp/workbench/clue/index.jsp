@@ -21,6 +21,17 @@
     <script type="text/javascript">
 
         $(function () {
+
+            // 选择日期的控件
+            $(".time").datetimepicker({
+                minView: "month",
+                language: 'zh-CN',
+                format: 'yyyy-mm-dd',
+                autoclose: true,
+                todayBtn: true,
+                pickerPosition: "bottom-left"
+            });
+
             $("#addBtn").click(function () {
                 $.ajax({
                     url: "workbench/clue/getUserList.do",
@@ -42,7 +53,78 @@
                 })
             });
 
+
+            // 为保存线索按钮绑定事件
+            $("#saveClud").click(function () {
+
+                $.ajax({
+                    url: "workbench/clue/saveClud.do",
+                    data: {
+                        fullname: $.trim($("#create-surname").val()),
+                        appellation: $.trim($("#create-call").val()),
+                        owner: $.trim($("#create-clueOwner").val()),
+                        company: $.trim($("#create-company").val()),
+                        job: $.trim($("#create-job").val()),
+                        email: $.trim($("#create-email").val()),
+                        phone: $.trim($("#create-phone").val()),
+                        website: $.trim($("#create-website").val()),
+                        mphone: $.trim($("#create-mphone").val()),
+                        state: $.trim($("#create-status").val()),
+                        source: $.trim($("#create-source").val()),
+                        // createBy: $.trim($("#create-").val()),  后台生成
+                        // createTime: $.trim($("#create-").val()),  后台生成
+                        description: $.trim($("#create-describe").val()),
+                        contactSummary: $.trim($("#create-contactSummary").val()),
+                        nextContactTime: $.trim($("#create-nextContactTime").val()),
+                        address: $.trim($("#create-address").val())
+                    },
+                    type: "post",
+                    dataType: "json",
+                    success: function (data) {
+
+                        if (data.success) {
+                            alert("保存成功");
+                            // 关闭模态窗口
+                            $("#createClueModal").modal("hide");
+                            return;
+                        }
+                        alert("保存失败");
+                    }
+                })
+
+            });
+
+
+            getClueList();
         });
+
+        function getClueList() {
+            $.ajax({
+                url: "workbench/clue/getClueList.do",
+                type: "get",
+                dataType: "json",
+                success: function (data) {
+                    /*
+                     data:[{clue1},{2},{3}]
+                     */
+                    var html = "";
+                    $.each(data, function (i, n) {
+                        html += '<tr>';
+                        html += '<td><input type="checkbox" name="xz" id="' + n.id + '"/></td>';
+                        html += '<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href=\'workbench/clue/detail.do?cid=' + n.id + '\';">' + n.fullname + '</a></td>';
+                        html += '<td>' + n.company + '</td>';
+                        html += '<td>' + n.phone + '</td>';
+                        html += '<td>' + n.mphone + '</td>';
+                        html += '<td>' + n.source + '</td>';
+                        html += '<td>' + n.owner + '</td>';
+                        html += '<td>' + n.state + '</td>';
+                        html += '</tr>';
+                    });
+
+                    $("#ClueList").html(html);
+                }
+            })
+        }
 
     </script>
 </head>
@@ -66,9 +148,9 @@
                                 style="font-size: 15px; color: red;">*</span></label>
                         <div class="col-sm-10" style="width: 300px;">
                             <select class="form-control" id="create-clueOwner">
-                                <option>zhangsan</option>
-                                <option>lisi</option>
-                                <option>wangwu</option>
+                                <%--                                <option>zhangsan</option>--%>
+                                <%--                                <option>lisi</option>--%>
+                                <%--                                <option>wangwu</option>--%>
                             </select>
                         </div>
                         <label for="create-company" class="col-sm-2 control-label">公司<span
@@ -82,8 +164,8 @@
                         <label for="create-call" class="col-sm-2 control-label">称呼</label>
                         <div class="col-sm-10" style="width: 300px;">
                             <select class="form-control" id="create-call">
-                                <c:forEach var="call" items="${appellationList}">
-                                    <option value="${call.value}">${call.text}</option>
+                                <c:forEach var="appellation" items="${appellationList}">
+                                    <option value="${appellation.value}">${appellation.text}</option>
                                 </c:forEach>
                                 <%--                                <option></option>--%>
                                 <%--                                <option>先生</option>--%>
@@ -130,14 +212,17 @@
                         <label for="create-status" class="col-sm-2 control-label">线索状态</label>
                         <div class="col-sm-10" style="width: 300px;">
                             <select class="form-control" id="create-status">
-                                <option></option>
-                                <option>试图联系</option>
-                                <option>将来联系</option>
-                                <option>已联系</option>
-                                <option>虚假线索</option>
-                                <option>丢失线索</option>
-                                <option>未联系</option>
-                                <option>需要条件</option>
+                                <c:forEach var="clueState" items="${clueStateList}">
+                                    <option value="${clueState.value}">${clueState.text}</option>
+                                </c:forEach>
+                                <%--                                <option></option>--%>
+                                <%--                                <option>试图联系</option>--%>
+                                <%--                                <option>将来联系</option>--%>
+                                <%--                                <option>已联系</option>--%>
+                                <%--                                <option>虚假线索</option>--%>
+                                <%--                                <option>丢失线索</option>--%>
+                                <%--                                <option>未联系</option>--%>
+                                <%--                                <option>需要条件</option>--%>
                             </select>
                         </div>
                     </div>
@@ -146,21 +231,23 @@
                         <label for="create-source" class="col-sm-2 control-label">线索来源</label>
                         <div class="col-sm-10" style="width: 300px;">
                             <select class="form-control" id="create-source">
-                                <option></option>
-                                <option>广告</option>
-                                <option>推销电话</option>
-                                <option>员工介绍</option>
-                                <option>外部介绍</option>
-                                <option>在线商场</option>
-                                <option>合作伙伴</option>
-                                <option>公开媒介</option>
-                                <option>销售邮件</option>
-                                <option>合作伙伴研讨会</option>
-                                <option>内部研讨会</option>
-                                <option>交易会</option>
-                                <option>web下载</option>
-                                <option>web调研</option>
-                                <option>聊天</option>
+                                <c:forEach var="source" items="${sourceList}">
+                                    <option value="${source.value}">${source.text}</option>
+                                </c:forEach>
+                                <%--                                <option>广告</option>--%>
+                                <%--                                <option>推销电话</option>--%>
+                                <%--                                <option>员工介绍</option>--%>
+                                <%--                                <option>外部介绍</option>--%>
+                                <%--                                <option>在线商场</option>--%>
+                                <%--                                <option>合作伙伴</option>--%>
+                                <%--                                <option>公开媒介</option>--%>
+                                <%--                                <option>销售邮件</option>--%>
+                                <%--                                <option>合作伙伴研讨会</option>--%>
+                                <%--                                <option>内部研讨会</option>--%>
+                                <%--                                <option>交易会</option>--%>
+                                <%--                                <option>web下载</option>--%>
+                                <%--                                <option>web调研</option>--%>
+                                <%--                                <option>聊天</option>--%>
                             </select>
                         </div>
                     </div>
@@ -185,7 +272,7 @@
                         <div class="form-group">
                             <label for="create-nextContactTime" class="col-sm-2 control-label">下次联系时间</label>
                             <div class="col-sm-10" style="width: 300px;">
-                                <input type="text" class="form-control" id="create-nextContactTime">
+                                <input type="text" class="form-control time" id="create-nextContactTime">
                             </div>
                         </div>
                     </div>
@@ -205,7 +292,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">保存</button>
+                <button type="button" class="btn btn-primary" id="saveClud">保存</button>
             </div>
         </div>
     </div>
@@ -496,29 +583,29 @@
                     <td>线索状态</td>
                 </tr>
                 </thead>
-                <tbody>
-                <tr>
-                    <td><input type="checkbox"/></td>
-                    <td><a style="text-decoration: none; cursor: pointer;"
-                           onclick="window.location.href='workbench/clue/detail.jsp';">李四先生</a></td>
-                    <td>动力节点</td>
-                    <td>010-84846003</td>
-                    <td>12345678901</td>
-                    <td>广告</td>
-                    <td>zhangsan</td>
-                    <td>已联系</td>
-                </tr>
-                <tr class="active">
-                    <td><input type="checkbox"/></td>
-                    <td><a style="text-decoration: none; cursor: pointer;"
-                           onclick="window.location.href='workbench/clue/detail.jsp';">李四先生</a></td>
-                    <td>动力节点</td>
-                    <td>010-84846003</td>
-                    <td>12345678901</td>
-                    <td>广告</td>
-                    <td>zhangsan</td>
-                    <td>已联系</td>
-                </tr>
+                <tbody id="ClueList">
+                <%--                <tr>--%>
+                <%--                    <td><input type="checkbox"/></td>--%>
+                <%--                    <td><a style="text-decoration: none; cursor: pointer;"--%>
+                <%--                           onclick="window.location.href='workbench/clue/detail.jsp';">李四先生</a></td>--%>
+                <%--                    <td>动力节点</td>--%>
+                <%--                    <td>010-84846003</td>--%>
+                <%--                    <td>12345678901</td>--%>
+                <%--                    <td>广告</td>--%>
+                <%--                    <td>zhangsan</td>--%>
+                <%--                    <td>已联系</td>--%>
+                <%--                </tr>--%>
+                <%--                <tr class="active">--%>
+                <%--                    <td><input type="checkbox"/></td>--%>
+                <%--                    <td><a style="text-decoration: none; cursor: pointer;"--%>
+                <%--                           onclick="window.location.href='workbench/clue/detail.jsp';">李四先生</a></td>--%>
+                <%--                    <td>动力节点</td>--%>
+                <%--                    <td>010-84846003</td>--%>
+                <%--                    <td>12345678901</td>--%>
+                <%--                    <td>广告</td>--%>
+                <%--                    <td>zhangsan</td>--%>
+                <%--                    <td>已联系</td>--%>
+                <%--                </tr>--%>
                 </tbody>
             </table>
         </div>

@@ -73,6 +73,10 @@
     <servlet-mapping>
         <servlet-name>ClueServletServlet</servlet-name>
         <url-pattern>/workbench/clue/getUserList.do</url-pattern>
+        <url-pattern>/workbench/clue/saveClud.do</url-pattern>
+        <url-pattern>/workbench/clue/getClueList.do</url-pattern>
+        <url-pattern>/workbench/clue/detail.do</url-pattern>
+        <url-pattern>/workbench/clue/getActivityBycid.do</url-pattern>
     </servlet-mapping>
 
 </web-app>

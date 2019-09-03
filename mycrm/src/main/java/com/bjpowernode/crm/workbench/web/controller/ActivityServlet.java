@@ -225,12 +225,22 @@ public class ActivityServlet extends HttpServlet {
     private void updateRemark(HttpServletRequest request, HttpServletResponse response) {
         String id = request.getParameter("id");
         String noteContent = request.getParameter("noteContent");
-        String sysTime = DateTimeUtil.getSysTime();
+        String editTime = DateTimeUtil.getSysTime();
         String userName = ((User) request.getSession().getAttribute("user")).getName();
+        ActivityRemark activityRemark = new ActivityRemark();
+
+        activityRemark.setEditFlag("1");
+        activityRemark.setEditTime(editTime);
+        activityRemark.setEditBy(((User) request.getSession().getAttribute("user")).getName());
 
         ActivityService proxyInstance = (ActivityService) ProxyFactory.getProxyInstance(ActivityServiceImpl.class);
-        boolean flag = proxyInstance.updateRemark(id, noteContent, sysTime, userName);
-        PrintJson.printJsonFlag(response, flag);
+        boolean flag = proxyInstance.updateRemark(id, noteContent, editTime, userName);
+
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("success", flag);
+        map.put("ar", activityRemark);
+
+        PrintJson.printJsonObj(response, map);
     }
 
 

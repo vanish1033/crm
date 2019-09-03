@@ -60,7 +60,7 @@
             });
             $("#remarkBody").on("mouseout", ".remarkDiv", function () {
                 $(this).children("div").children("div").hide();
-            })
+            });
 
 
             // 为更新按钮绑定事件，执行备注的修改操作
@@ -77,8 +77,10 @@
                     dataType: "json",
                     success: function (data) {
                         if (data.success) {
-                            // 成功的话就更新备注列表，并关闭模态窗口
+                            // 成功的话就更新备注列表（懒得改时间了）
                             $("#e" + id).html($.trim(notContent));
+                            //更新editTime和editBy
+                            $("#s" + id).html(data.ar.editTime + " 由" + data.ar.editBy);
 
                             // 关闭模态窗口
                             $("#editRemarkModal").modal("hide");
@@ -114,8 +116,8 @@
                             html += '<div id="' + data.ar.id + '" class="remarkDiv" style="height: 60px;">';
                             html += '<img title="zhangsan" src="image/user-thumbnail.png" style="width: 30px; height:30px;">';
                             html += '<div style="position: relative; top: -40px; left: 40px;" >';
-                            html += '<h5 id="e'+ data.ar.id +'">' + data.ar.noteContent + '</h5>';
-                            html += '<font color="gray">市场活动</font> <font color="gray">-</font> <b>${a.name}</b> <small style="color: gray;"> ' + (data.ar.createTime) + ' 由' + (data.ar.createBy) + '</small>';
+                            html += '<h5 id="e' + data.ar.id + '">' + data.ar.noteContent + '</h5>';
+                            html += '<font color="gray">市场活动</font> <font color="gray">-</font> <b>${a.name}</b> <small style="color: gray;" id="s'+ n.id +'"> ' + (data.ar.createTime) + ' 由' + (data.ar.createBy) + '</small>';
                             html += '<div style="position: relative; left: 500px; top: -30px; height: 30px; width: 100px; display: none;">';
                             html += '<a class="myHref" href="javascript:void(0);" onclick="editRemark(\'' + data.ar.id + '\')"><span class="glyphicon glyphicon-edit" style="font-size: 20px; color: #FF0000;"></span></a>';
                             html += '&nbsp;&nbsp;&nbsp;&nbsp;';
