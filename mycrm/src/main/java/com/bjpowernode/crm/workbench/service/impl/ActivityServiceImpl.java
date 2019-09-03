@@ -130,4 +130,10 @@ public class ActivityServiceImpl implements ActivityService {
         map.put("cid", cid);
         return activityDao.searchActivityByName(map);
     }
+
+
+    @Override
+    public List<Activity> searchActivityByNameVague(String aname) {
+        return activityDao.searchActivityByNameVague(aname);
+    }
 }

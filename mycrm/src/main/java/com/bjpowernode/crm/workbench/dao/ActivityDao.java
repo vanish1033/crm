@@ -26,4 +26,6 @@ public interface ActivityDao {
 
     List<Activity> searchActivityByName(HashMap<String, String> map);
 
+    List<Activity> searchActivityByNameVague(String aname);
+
 }

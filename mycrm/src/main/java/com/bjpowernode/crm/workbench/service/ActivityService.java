@@ -34,4 +34,7 @@ public interface ActivityService {
     boolean saveRemark(ActivityRemark activityRemark);
 
     List<Activity> searchActivity(String name, String cid);
+
+    List<Activity> searchActivityByNameVague(String aname);
+
 }

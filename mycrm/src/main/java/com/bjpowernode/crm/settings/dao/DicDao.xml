@@ -9,7 +9,7 @@
     </select>
 
     <select id="getAllByDicType" resultType="com.bjpowernode.crm.settings.domain.DicValue">
-        select * from tbl_dic_value where typeCode=#{code}
+        select * from tbl_dic_value where typeCode=#{code} order by orderNo
     </select>
 </mapper>
 

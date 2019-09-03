@@ -13,9 +13,7 @@ import com.bjpowernode.crm.workbench.service.ActivityService;
 import com.bjpowernode.crm.workbench.service.ClueService;
 import com.bjpowernode.crm.workbench.service.impl.ActivityServiceImpl;
 import com.bjpowernode.crm.workbench.service.impl.ClueServiceImpl;
-import jdk.nashorn.internal.ir.Flags;
 
-import javax.crypto.CipherSpi;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -45,6 +43,8 @@ public class ClueServlet extends HttpServlet {
             searchActivity(request, response);
         } else if ("/workbench/clue/bund.do".equals(servletPath)) {
             bund(request, response);
+        } else if ("/workbench/clue/searchActivityByNameVague.do".equals(servletPath)) {
+            searchActivityByNameVague(request, response);
         }
     }
 
@@ -156,6 +156,16 @@ public class ClueServlet extends HttpServlet {
         ClueService proxyInstance = (ClueService) ProxyFactory.getProxyInstance(ClueServiceImpl.class);
         boolean flad = proxyInstance.bund(cid, aids);
         PrintJson.printJsonFlag(response, flad);
+    }
+
+    private void searchActivityByNameVague(HttpServletRequest request, HttpServletResponse response) {
+        String aname = request.getParameter("aname");
+
+        ActivityService proxyInstance = (ActivityService) ProxyFactory.getProxyInstance(ActivityServiceImpl.class);
+
+        List<Activity> activityList = proxyInstance.searchActivityByNameVague(aname);
+
+        PrintJson.printJsonObj(response, activityList);
     }
 }
 
