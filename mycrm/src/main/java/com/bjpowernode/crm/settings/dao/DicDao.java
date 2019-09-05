@@ -9,6 +9,7 @@ import java.util.List;
  * @author:whr 2019/9/2
  */
 public interface DicDao {
+
     List<DicType> getAllDictype();
 
     List<DicValue> getAllByDicType(String code);

@@ -183,7 +183,7 @@
      style="position: relative; left: 40px; top: 20px; width: 80%; background-color: #F7F7F7; display: none;">
 
     <form id="tranForm" action="workbench/clue/convert.do" method="post">
-        <input type="text" name="cid" value="${param.id}" hidden>  <!--隐藏域-->
+        <input type="text" name="cid" value="${param.cid}" hidden>  <!--隐藏域-->
         <div class="form-group" style="width: 400px; position: relative; left: 20px;">
             <label for="amountOfMoney">金额</label>
             <input type="text" class="form-control" name="money" id="amountOfMoney">

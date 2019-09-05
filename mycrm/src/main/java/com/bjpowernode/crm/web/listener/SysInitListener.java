@@ -10,8 +10,7 @@ import com.bjpowernode.crm.utils.ProxyFactory;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class SysInitListener implements ServletContextListener {
 
@@ -42,6 +41,15 @@ public class SysInitListener implements ServletContextListener {
 //        System.out.println("------------------------");
 //        List<DicValue> clueState = (List<DicValue>) event.getServletContext().getAttribute("clueStateList");
 //        clueState.forEach(System.out::println);
+
+        ResourceBundle bundle = ResourceBundle.getBundle("Stage2Possibility");
+        Enumeration<String> keys = bundle.getKeys();
+        HashMap<String, String> map = new HashMap<>();
+        while (keys.hasMoreElements()) {
+            String key = keys.nextElement();
+            map.put(key, bundle.getString(key));
+        }
+        event.getServletContext().setAttribute("pMap", map);
     }
 
 }

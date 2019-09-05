@@ -129,6 +129,16 @@
         where car.clueId=#{cid}
     </select>
 
+    <select id="selectById" resultType="com.bjpowernode.crm.workbench.domain.Clue">
+
+    select * from tbl_clue where id=#{cid}
+
+    </select>
+
+
+    <delete id="deleteById">
+        delete from tbl_clue where id=#{id}
+    </delete>
 
 </mapper>
 

@@ -2,6 +2,7 @@ package com.bjpowernode.crm.workbench.service;
 
 import com.bjpowernode.crm.workbench.domain.Activity;
 import com.bjpowernode.crm.workbench.domain.Clue;
+import com.bjpowernode.crm.workbench.domain.Tran;
 
 import java.util.List;
 
@@ -22,5 +23,7 @@ public interface ClueService {
     boolean deleteCarById(String id);
 
     boolean bund(String cid, String[] aids);
+
+    boolean convert(String cid, Tran tran, String createBy);
 
 }

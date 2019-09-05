@@ -9,6 +9,7 @@ import com.bjpowernode.crm.utils.ProxyFactory;
 import com.bjpowernode.crm.utils.UUIDUtil;
 import com.bjpowernode.crm.workbench.domain.Activity;
 import com.bjpowernode.crm.workbench.domain.Clue;
+import com.bjpowernode.crm.workbench.domain.Tran;
 import com.bjpowernode.crm.workbench.service.ActivityService;
 import com.bjpowernode.crm.workbench.service.ClueService;
 import com.bjpowernode.crm.workbench.service.impl.ActivityServiceImpl;
@@ -45,6 +46,8 @@ public class ClueServlet extends HttpServlet {
             bund(request, response);
         } else if ("/workbench/clue/searchActivityByNameVague.do".equals(servletPath)) {
             searchActivityByNameVague(request, response);
+        } else if ("/workbench/clue/convert.do".equals(servletPath)) {
+            convert(request, response);
         }
     }
 
@@ -167,6 +170,42 @@ public class ClueServlet extends HttpServlet {
 
         PrintJson.printJsonObj(response, activityList);
     }
+
+    private void convert(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String cid = request.getParameter("cid");
+        String method = request.getMethod();
+
+        Tran tran = null;
+        if ("post".equalsIgnoreCase(method)) {
+            // 说明是需要创建交易的
+            tran = new Tran();
+            String money = request.getParameter("money");
+            String tranName = request.getParameter("tranName");
+            String expectedDate = request.getParameter("predictDate");
+            String stage = request.getParameter("stage");
+            String activityId = request.getParameter("activityId");
+
+            tran.setId(UUIDUtil.getUUID());
+            tran.setMoney(money);
+            tran.setCreateTime(DateTimeUtil.getSysTime());
+            tran.setCreateBy(((User) request.getSession().getAttribute("user")).getName());
+            tran.setName(tranName);
+            tran.setExpectedDate(expectedDate);
+            tran.setStage(stage);
+            tran.setActivityId(activityId);
+        }
+
+        ClueService proxyInstance = (ClueService) ProxyFactory.getProxyInstance(ClueServiceImpl.class);
+        boolean flag = proxyInstance.convert(cid, tran, ((User) request.getSession().getAttribute("user")).getName());
+
+        if (flag) {
+            response.sendRedirect(request.getContextPath() + "/workbench/clue/index.jsp");
+        } else {
+            response.sendRedirect(request.getContextPath() + "/error.jsp");
+        }
+
+    }
+
 }
 
 
