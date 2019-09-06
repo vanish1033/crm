@@ -25,6 +25,18 @@
         )
     </insert>
 
+    <select id="getTranHistoryListByTranId" resultType="com.bjpowernode.crm.workbench.domain.TranHistory">
+        select
+        id,
+        stage,
+        money,
+        expectedDate,
+        createTime,
+        createBy,
+        tranId
+        from tbl_tran_history where tranId=#{id}
+    </select>
+
 </mapper>
 
 

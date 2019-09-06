@@ -32,6 +32,7 @@
                     String value=pMap.get(key);
             %>
             "<%=key%>":<%=value%>,
+            <%--"${key}":${value},--%>
             <%
                 }
             %>

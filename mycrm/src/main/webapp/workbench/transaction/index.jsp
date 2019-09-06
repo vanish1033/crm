@@ -145,9 +145,9 @@
                 <tr>
                     <td><input type="checkbox"/></td>
                     <td><a style="text-decoration: none; cursor: pointer;"
-                           onclick="window.location.href='workbench/transaction/detail.jsp';">动力节点-交易01</a></td>
-                    <td>动力节点</td>
-                    <td>谈判/复审</td>
+                           onclick="window.location.href='workbench/transaction/detail.do?id=7d2b982046934abf8a21d0b362ba0833';">ok辣条厂收购</a></td>
+                    <td>ok辣条厂</td>
+                    <td>04决定决策者</td>
                     <td>新业务</td>
                     <td>zhangsan</td>
                     <td>广告</td>

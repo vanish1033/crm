@@ -98,7 +98,7 @@
                     $("#tranForm").submit();
                 } else {
                     // 不需要创建交易，直接把cid提交后台就行
-                    window.location.href = "workbench/clue/convert.do?cid=${param.id}";
+                    window.location.href = "workbench/clue/convert.do?cid=${param.cid}";
                 }
             });
         });

@@ -173,10 +173,9 @@ public class ClueServlet extends HttpServlet {
 
     private void convert(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String cid = request.getParameter("cid");
-        String method = request.getMethod();
 
         Tran tran = null;
-        if ("post".equalsIgnoreCase(method)) {
+        if ("post".equalsIgnoreCase(request.getMethod())) {
             // 说明是需要创建交易的
             tran = new Tran();
             String money = request.getParameter("money");

@@ -35,7 +35,7 @@ public class ClueServiceImpl implements ClueService {
     TranHistoryDao tranHistoryDao = SqlSessionUtil.getSqlSession().getMapper(TranHistoryDao.class);
 
     /**
-     * 线索转换方法
+     * 线索转换
      *
      * @param cid
      * @param tran
@@ -47,6 +47,7 @@ public class ClueServiceImpl implements ClueService {
         // 查询线索相关信息
         Clue clue = clueDao.selectById(cid);
         System.out.println(clue.getDescription());
+
         /*
             添加客户（公司）
          */
@@ -137,7 +138,7 @@ public class ClueServiceImpl implements ClueService {
         /*
             将线索和市场活动关联表里的信息，备份到联系人和市场活动关联表里
          */
-        // 先查出线索和市场活动关联表里的信息
+        // 先查出线索和市场活动的关联关系
         List<ClueActivityRelation> clueActivityRelationList = clueActivityRelationDao.getListByClueId(clue.getId());
 
         for (ClueActivityRelation relation : clueActivityRelationList) {
@@ -178,13 +179,16 @@ public class ClueServiceImpl implements ClueService {
             tranHistory.setMoney(tran.getMoney());
             tranHistory.setStage(tran.getStage());
             tranHistory.setTranId(tran.getId());
+
             if (tranHistoryDao.save(tranHistory) != 1) {
                 flag = false;
             }
         }
 
         /*
-         最后删除这条线索相关的一切
+
+            最后删除这条线索相关的一切
+
          */
         // 删除线索备注
         List<ClueRemark> clueRemarkList = clueRemarkDao.selectByCid(clue.getId());
@@ -193,7 +197,7 @@ public class ClueServiceImpl implements ClueService {
             flag = false;
         }
 
-        // 删除将线索与市场活动的关联数据删除
+        // 将线索与市场活动的关联数据删除
         List<ClueActivityRelation> listByClueId = clueActivityRelationDao.getListByClueId(clue.getId());
         int num1 = clueActivityRelationDao.deleteByCid(clue.getId());
         if (num1 != listByClueId.size()) {

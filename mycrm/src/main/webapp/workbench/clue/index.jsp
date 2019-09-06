@@ -86,15 +86,17 @@
                             alert("保存成功");
                             // 关闭模态窗口
                             $("#createClueModal").modal("hide");
+                            getClueList();
+
                             return;
                         }
                         alert("保存失败");
                     }
-                })
+                });
 
             });
 
-
+            // 页面加载完毕后自动刷新一次列表
             getClueList();
         });
 
