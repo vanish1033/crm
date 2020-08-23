@@ -7,6 +7,7 @@ import java.io.IOException;
 
 public class LoginFilter implements Filter {
 
+    @Override
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws ServletException, IOException {
 
         // 和登录相关的需求直接放行
